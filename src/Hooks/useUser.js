@@ -1,4 +1,4 @@
-import {useQuery, useQueryClient, useMutation} from 'react-query';
+import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
 import {login, register} from '../service/auth.api';
 
 const dummyUser = ()=>{

@@ -1,4 +1,4 @@
-import {useQuery, useQueryClient, useMutation} from 'react-query';
+import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
 import { createPost, deletePost, getPosts, getSinglePost, getUserPosts } from '../service/post.api';
 
 export const useUserQuery = () => {
