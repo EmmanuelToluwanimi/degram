@@ -16,7 +16,7 @@ export const dummyRoutes = [
       icon: "FaHome"
     },
     {
-      path: "/profile",
+      path: "/profile/3",
       name: "Profile",
       icon: "FaHome"
     },

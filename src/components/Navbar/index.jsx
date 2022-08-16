@@ -1,7 +1,7 @@
 import React from "react";
 import { dummyImage } from "../../utils/constants";
-import {BiLogIn} from 'react-icons/bi'
-import {ImUserPlus} from 'react-icons/im'
+import { BiLogIn } from "react-icons/bi";
+import { ImUserPlus } from "react-icons/im";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {

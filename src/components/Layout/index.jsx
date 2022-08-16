@@ -1,4 +1,7 @@
 import React from "react";
+import Navbar from "../Navbar";
+import Sidenav from "../Sidenav";
+
 // import Navbar from './Navbar/index.jsx'
 
 export default function Layout({ children }) {

@@ -15,6 +15,9 @@ export default function Home() {
         <div>
           <div className="text-2xl px-3 border-b"> Posts</div>
           <SinglePost />
+          <SinglePost />
+          <SinglePost />
+          <SinglePost />
         </div>
       </div>
     </Layout>
