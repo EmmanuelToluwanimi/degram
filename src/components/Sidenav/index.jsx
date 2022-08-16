@@ -1,9 +1,17 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { dummyRoutes } from "../../utils/constants";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { clearCookies, clearLocalStorage, dummyRoutes } from "../../utils/constants";
 
 export default function Sidenav({user}) {
   const location = useLocation().pathname;
+  const navigate = useNavigate();
+
+  const logout = () => {
+    clearLocalStorage()
+    clearCookies()
+    navigate("/login")
+
+  }
 
   return (
     <aside className="side-nav w-[20%] ">
@@ -26,6 +34,18 @@ export default function Sidenav({user}) {
               </div>
             );
           })}
+          <div
+                className={`flex items-center gap-2 hover:bg-gray-50 p-3 ${
+                  location !== "login"
+                    ? "bg-white text-gray-400"
+                    : "bg-blue-50 text-gray-600"
+                }`}
+                onClick={() => { 
+                  logout()
+                }}
+              >
+                  <span className="">Logout</span>
+              </div>
         </div>
       </div>
     </aside>

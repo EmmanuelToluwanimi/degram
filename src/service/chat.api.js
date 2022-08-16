@@ -10,6 +10,16 @@ export const getAllConversations = async () => {
     }
 }
 
+export const getSingleConversation = async (key) => {
+    const id = key.queryKey[1]
+    try {
+        const res = await api.get("/conversations/"+id, getOptions());
+        return res.data.data;
+    } catch (error) {
+        throw error.response.data;
+    }
+}
+
 export const getAllMessages = async (id) => {
     try {
         const res = await api.get(`/messages/${id}`, getOptions());

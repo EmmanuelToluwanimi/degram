@@ -28,6 +28,17 @@ export default function Createpost({user}) {
     })
   }
 
+  const handleFileUpload =(e)=>{
+    var file = e.target.files[0];
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    // The file's text will be printed here
+    console.log(event.target.result)
+  };
+
+  console.log(reader.readAsDataURL(file))
+  }
+
   return (
     <>
       {/* post a message */}
@@ -45,6 +56,7 @@ export default function Createpost({user}) {
               className="block w-full text-sm text-gray-900 p-2 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer"
               id="file_input"
               type="file"
+              onChange={handleFileUpload}
             />
 
             <label

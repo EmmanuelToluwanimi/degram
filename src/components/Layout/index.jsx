@@ -13,8 +13,9 @@ export default function Layout({ children }) {
 
     
   const token = getToken();
-  if (token=== undefined) {
-    return <Navigate to="login" />;
+  // console.log(token)
+  if (token=== undefined || token === null || token === "") {
+    return <Navigate to="/login" />;
   }
 
   

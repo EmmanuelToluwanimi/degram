@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import Layout from "../../components/Layout";
 import SinglePost from "../../components/Singlepost";
 import Userlabel from "../../components/Userlabel";
+import { useFollowerQuery } from "../../Hooks/useFollowers";
+import { useFollowingQuery } from "../../Hooks/useFollowing";
 import { getFollowers, getFollowing } from "../../service/Follow.api";
 import { getUserPosts } from "../../service/post.api";
 import { dummyImage } from "../../utils/constants";
@@ -10,20 +12,16 @@ import { dummyImage } from "../../utils/constants";
 
 export default function Profile() {
   const tabs = ["Posts", "Followings", "Followers"];
-  const [selectedtab, setSelecttab] = React.useState(tabs[0]);
   const [userposts, setUserposts] = useState([])
   const {id} = useParams();
-  const [followingCount, setFollowingCount] = useState(0)
-  const [following, setFollowing] = useState([])
-  const [followersCount, setFollowersCount] = useState(0)
-  const [followers, setFollowers] = useState([])
+  const [searchParam, setSearchParam] = useSearchParams()
+  const s = searchParam.get("tab");
+  const [selectedtab, setSelecttab] = React.useState(s || tabs[0]);
 
   useEffect(() => {
     fetchUserProfile(id);
-    fetchFollowers()
-    fetchFollowing()
-  }, [id])
   
+  }, [id])
 
   async function fetchUserProfile(id){
     try {
@@ -34,27 +32,8 @@ export default function Profile() {
     }
   }
 
-  async function fetchFollowing(){
-    try {
-      const res = await getFollowing();
-      setFollowing(res.followings);
-      setFollowingCount(res.followingsCount)
-      // console.log("folowingnn",res)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async function fetchFollowers(){
-    try {
-      const res = await getFollowers();
-      setFollowers(res.followers);
-      setFollowersCount(res.followersCount)
-      // console.log("foloowas",res)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const {data: followings} = useFollowingQuery()
+  const {data: followers} = useFollowerQuery()
   
 
   return (
@@ -77,6 +56,7 @@ export default function Profile() {
                 {tabs.map((tab, index) => {
                   return (
                     <div
+                    key={index}
                       className={`text-xl cursor-pointer text-center border py-2 px-3 w-full hover:bg-gray-50 ${
                         tab === selectedtab ? "bg-gray-200" : "bg-white"
                       }`}
@@ -89,8 +69,8 @@ export default function Profile() {
               </div>
 
               {selectedtab === "Posts" && <Userposts posts={userposts} currentUser={id}/>}
-              {selectedtab === "Followers" && <Followers followers={followers} followersCount={followersCount}/>}
-              {selectedtab === "Followings" && <Followings followings={following} followingsCount={followingCount}/>}
+              {selectedtab === "Followers" && <Followers followers={followers.followers} followings={followings.followings} followersCount={followers?.followersCount}/>}
+              {selectedtab === "Followings" && <Followings followings={followings.followings} followingsCount={followings?.followingsCount}/>}
             </div>
           </div>
         </div>
@@ -115,8 +95,8 @@ function Userposts({posts, currentUser}) {
   );
 }
 
-function Followers({followers, followersCount}) {
-  console.log("followers",followers)
+function Followers({followers, followersCount, followings}) {
+  // console.log("followers",followers)
   return (
     <>
       <div className="mt-2">
@@ -125,7 +105,9 @@ function Followers({followers, followersCount}) {
           {
             followers.map((follower, index) => {
               return (
-                <Userlabel key={index} data={follower}/>
+                <Userlabel key={index} data={follower} isFollowing={
+                  followings.find(following => following.id === follower.id) ? true : false
+                }/>
               )
             })
           }
@@ -136,7 +118,7 @@ function Followers({followers, followersCount}) {
 }
 
 function Followings({followings, followingsCount}) {
-  console.log("followings",followings)
+  // console.log("followings",followings)
   return (
     <>
       <div className="mt-2">
@@ -145,7 +127,7 @@ function Followings({followings, followingsCount}) {
           {
             followings.map((following, index) => {
               return (
-                <Userlabel key={index} data={following}/>
+                <Userlabel key={index} data={following} isFollowing={true}/>
               )
             })
           }

@@ -1,13 +1,13 @@
 import { api } from "../utils/config";
 import Cookies from 'js-cookie'
-import { setCookie } from "../utils/constants";
+import { getOptions, setCookie } from "../utils/constants";
 
 export const login = async (data) => {
 
     try {
         const res = await api.post('/auth/login', data);
         const token = res.data.data?.accessToken;
-        console.log(token)
+        // console.log(token)
         setCookie("x-token", token, 1);
         localStorage.setItem("user", JSON.stringify(res.data.data));
         return res.data.data;
@@ -29,6 +29,15 @@ export const register = async (data) => {
     } catch (error) {
         // console.log(error.response.data);
 
+        throw error.response.data;
+    }
+}
+
+export const getUserInfo = async (id) => {
+    try {
+        const res = await api.get(`/user/${id}`, getOptions());
+        return res.data.data;
+    } catch (error) {
         throw error.response.data;
     }
 }

@@ -17,7 +17,7 @@ export default function Navbar({user}) {
   
   // console.log(user.)
   return (
-    <nav className="flex justify-between items-center text- bg-white py-3 px-10 shadow w-full sticky top-0">
+    <nav className="flex justify-between z-10 items-center text- bg-white py-3 px-10 shadow w-full sticky top-0">
       <div className="nav-logo text-3xl">Degram</div>
       <div className="nav-search w-1/3">
         <input
