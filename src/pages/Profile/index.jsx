@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
 import SinglePost from "../../components/Singlepost";
+import Userlabel from "../../components/Userlabel";
 import { dummyImage } from "../../utils/constants";
 
 export default function Profile() {
@@ -34,14 +36,11 @@ export default function Profile() {
                     </div>
                   );
                 })}
-
               </div>
 
-
-              {selectedtab == "Posts" && <Userposts/>}
-              {selectedtab === "Followers" && <Followers/>}
-              {selectedtab === "Followings" && <Followings/>}
-
+              {selectedtab !== "Posts" && <Userposts />}
+              {selectedtab !== "Followers" && <Followers />}
+              {selectedtab === "Followings" && <Followings />}
             </div>
           </div>
         </div>
@@ -53,57 +52,37 @@ export default function Profile() {
 function Userposts() {
   return (
     <>
-      <SinglePost/>
-      <SinglePost/>
-      <SinglePost/>
-      <SinglePost/>
+      <SinglePost />
+      <SinglePost />
+      <SinglePost />
+      <SinglePost />
     </>
-  )
+  );
 }
 
 function Followers() {
   return (
     <>
       <div className="mt-2">
-        <div className="mt-2 text-xl font-semibold">
-          Followers (32)
-        </div>
+        <div className="mt-2 text-xl font-semibold">Followers (32)</div>
         <div className="mt-2">
-          <Userlabel/>
+          <Userlabel />
         </div>
       </div>
     </>
-  )
+  );
 }
 
 function Followings() {
   return (
     <>
       <div className="mt-2">
-        <div className="mt-2 text-xl font-semibold">
-          Followings (32)
-        </div>
+        <div className="mt-2 text-xl font-semibold">Followings (32)</div>
         <div className="mt-2">
-          <Userlabel/>
+          <Userlabel />
         </div>
       </div>
     </>
-  )
+  );
 }
 
-function Userlabel(){
-  return (
-    <>
-    <div className="flex gap-2 p-2 border rounded-lg text-left items-center mb-2 ">
-            <img
-              className="w-10 h-10 shadow rounded-full"
-              src={dummyImage}
-              alt="profile"
-            />
-            <div>
-              <div className="text-lg font-medium">Alice Banger</div>
-            </div>
-          </div>
-    </>
-  )
-}

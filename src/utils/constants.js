@@ -11,8 +11,8 @@ export const dummyRoutes = [
       icon: "FaHome"
     },
     {
-      path: "/chats",
-      name: "Messages",
+      path: "/conversations",
+      name: "Chats",
       icon: "FaHome"
     },
     {

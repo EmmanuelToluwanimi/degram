@@ -7,6 +7,8 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Following from './pages/Following';
 import Followers from './pages/Followers';
+import Chat from './pages/Chats';
+import Messanger from './pages/Messanger';
 
 function App() {
 
@@ -19,6 +21,9 @@ function App() {
       <Route path="profile/:id" element={<Profile />}/>
       <Route path="profile/:id?tab=following" element={<Following />}/>
       <Route path="profile/:id?tab=followers" element={<Followers />}/>
+      <Route path="conversations" element={<Chat />}/>
+      <Route path="chat/:id" element={<Messanger />}/>
+
     </Routes>
   </BrowserRouter>
   )
