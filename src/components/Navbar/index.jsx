@@ -1,10 +1,21 @@
-import React from "react";
-import { dummyImage } from "../../utils/constants";
+import React, { useEffect, useState } from "react";
+import { dummyImage, formatUsername } from "../../utils/constants";
 import { BiLogIn } from "react-icons/bi";
 import { ImUserPlus } from "react-icons/im";
 import { Link } from "react-router-dom";
+import { useUserQuery } from "../../Hooks/useUser";
 
-export default function Navbar() {
+export default function Navbar({user}) {
+  // const {data: user}=useUserQuery()
+  // useEffect(() => {
+    
+  
+  //   setUname(user?.username || "")
+  // }, [user])
+
+  // const [uname, setUname] = useState("")
+  
+  // console.log(user.)
   return (
     <nav className="flex justify-between items-center text- bg-white py-3 px-10 shadow w-full sticky top-0">
       <div className="nav-logo text-3xl">Degram</div>
@@ -17,14 +28,18 @@ export default function Navbar() {
           required
         />
       </div>
-      {/* <div className="nav-profile ">
+      <div className="nav-profile flex items-center gap-2">
+      <div className="nav-profile-dropdown">
+          {formatUsername(user?.username || "")}
+        </div>
         <img
           className="w-10 h-10 shadow rounded-full"
           src={dummyImage}
           alt="profile"
         />
-      </div> */}
-      <div className="nav-links flex gap-2">
+        
+      </div>
+      {/* <div className="nav-links flex gap-2">
         <div>
           <Link to="/login">
             <span className="text-black bg-blue-100 rounded hover:bg-blue-300 hover:text-white focus:ring-4 focus:ring-blue-300 font-medium text-sm px-5 py-2.5 flex gap-2 items-center text-center">
@@ -41,7 +56,7 @@ export default function Navbar() {
             </span>
           </Link>
         </div>
-      </div>
+      </div> */}
     </nav>
   );
 }

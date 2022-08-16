@@ -6,7 +6,8 @@ export const login = async (data) => {
 
     try {
         const res = await api.post('/auth/login', data);
-        const token = res.headers["x-token"];
+        const token = res.data.data?.accessToken;
+        console.log(token)
         setCookie("x-token", token, 1);
         localStorage.setItem("user", JSON.stringify(res.data.data));
         return res.data.data;
@@ -21,7 +22,7 @@ export const register = async (data) => {
 
     try {
         const res = await api.post('/auth/register', data);
-        const token = res.headers["x-token"];
+        const token = res.data.data?.accessToken;;
         setCookie("x-token", token, 1);
         localStorage.setItem("user", JSON.stringify(res.data.data));
         return res.data.data;
