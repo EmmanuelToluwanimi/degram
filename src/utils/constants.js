@@ -2,12 +2,12 @@ import Cookies from "js-cookie";
 
 export const baseURL =
   process.env.NODE_ENV === "production"
-    ? "https://degram.herokuapp.com/api"
+    ? "https://degram-api.herokuapp.com/api"
     : "http://localhost:5000/api";
 
 export const baseImgURL =
   process.env.NODE_ENV === "production"
-    ? "https://degram.herokuapp.com"
+    ? "https://degram-api.herokuapp.com"
     : "http://localhost:5000";
 
 export const dummyImage =
