@@ -5,11 +5,70 @@ import { useSingleConvoQuery } from "../../Hooks/useSingleConversation";
 import { useUserQuery } from "../../Hooks/useUser";
 import { getUserInfo } from "../../service/auth.api";
 import { getAllMessages, sendMessage } from "../../service/chat.api";
+import { io } from "socket.io-client";
+import { baseImgURL } from "../../utils/constants";
 
+const socket = io(baseImgURL);
 
 export default function Messanger() {
 
   const {id} = useParams()
+  const [welcomemsg, setWelcomemsg] = useState("")
+  const {data: currentUser} = useUserQuery();
+  const [chats, setChats] = useState([])
+
+
+  useEffect(() => {
+    sendPing()
+    receivePing()
+    // socket.emit('ping', {id: id});
+    return () => {
+      socket.off('join')
+    };
+    
+  }, [id])
+
+  useEffect(() => {
+    receivePing()
+    receiveChat()
+    // socket.emit('ping', {id: id});
+    return () => {
+      socket.off('join')
+      socket.off('chat')
+    };
+  }, [socket]);
+  
+  const sendPing = async() => {
+    socket.emit('join', {
+      id: currentUser?.id,
+      name: currentUser?.username,
+      text: `${currentUser?.username} is online`
+    });
+  }
+
+  const receivePing =()=>{
+    socket.on('join', (data) => {
+      // console.log(data);
+      if (!data.name) return;
+      setWelcomemsg(data.text);
+    });
+  }
+
+  const sendChat = (data)=> {
+    socket.emit('chat', data);
+  }
+
+  const receiveChat =()=> {
+    socket.on('chat', (data) => {
+      if (data.receiverId === JSON.stringify(currentUser?.id) && data.senderId === id) {
+        setChats(
+          (prev) => [...prev, data]
+        );
+      };
+    });
+  }
+  
+
   const {data: convo} = useSingleConvoQuery(id)
   const [convoId, setConvoId] = useState("")
   const [friendName, setFriendName] = useState("")
@@ -35,17 +94,17 @@ export default function Messanger() {
       
   }
 
+  useEffect(() => {
+    console.log(chats)
+  }, [chats])
+  
 
   const messagesEndRef = useRef(null)
-
-  const {data: currentUser} = useUserQuery();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
-  const [chats, setChats] = useState([])
-  const [uname, setUname] = useState("")
   const [newText, setNewText] = useState("")
 
   async function fetchChats(id) {
@@ -67,11 +126,6 @@ export default function Messanger() {
     scrollToBottom()
   }, [chats])
 
-  // useEffect(() => {
-    
-  //   console.log("username", uname)
-  // }, [uname])
-
   const handleChange= (e) => {
     setNewText(e.target.value)
   }
@@ -90,7 +144,9 @@ export default function Messanger() {
 
       await sendMessage(msg)
       chats.push(msg)
+      sendChat(msg)
       setNewText("")
+      scrollToBottom()
       
     } catch (error) {
       console.log(error)
@@ -107,7 +163,9 @@ export default function Messanger() {
           Private Chat - {friendName}
         </div>
 
-        <div>
+        <div className="pb-12">
+          <div className="text-small text-center mb-2 text-gray-400">{welcomemsg && welcomemsg}</div>
+
           
           {
             chats.map((chat, index) => {
@@ -121,7 +179,7 @@ export default function Messanger() {
         </div>
 
         {/* send component */}
-        <div className="mt-2 w-full bg-blue-500">
+        <div className="mt-8 w-full bg-blue-500">
           <div ref={messagesEndRef} ></div>
 
           <div>
