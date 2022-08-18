@@ -3,7 +3,7 @@ import {
   followUserMutation,
   unfollowUserMutation,
 } from "../../Hooks/useFollowing";
-import { dummyImage } from "../../utils/constants";
+import { baseImgURL, baseURL, dummyImage } from "../../utils/constants";
 import { FaEnvelope } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -72,7 +72,7 @@ export default function SinglePost({ post, currentUser, following }) {
         <div className="mt-3">
           <img
             className="w-full h-[300px] shadow fit-center"
-            src={dummyImage}
+            src={post.imgUrl ? `${baseImgURL}/${post.imgUrl}` : dummyImage}
             alt="profile"
           />
         </div>

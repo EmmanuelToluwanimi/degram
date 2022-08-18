@@ -1,43 +1,49 @@
 import React, { useState } from "react";
 import { createPostMutation } from "../../Hooks/usePost";
 
-
-export default function Createpost({user}) {
-
-  const {data, mutate, isLoading} = createPostMutation()
+export default function Createpost({ user }) {
+  const { data, mutate, isLoading } = createPostMutation();
   const [feed, setFeed] = useState({
     imgUrl: "",
     caption: "",
-  })
+  });
 
   const handleChange = (e) => {
     setFeed({
       ...feed,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleFileUpload = (e) => {
+    var file = e.target.files[0];
+    // console.log(file.name)
+    setFeed({...feed, imgUrl: file})
+  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate({
-      variables: {
-        title: e.target.title.value,
-        content: e.target.content.value,
-        userId: user.id
-      }
-    })
-  }
+    // console.log(feed)
 
-  const handleFileUpload =(e)=>{
-    var file = e.target.files[0];
-  var reader = new FileReader();
-  reader.onload = function(event) {
-    // The file's text will be printed here
-    console.log(event.target.result)
+    if (feed.imgUrl === "" || feed.caption === "") {
+      return alert("Please fill all fields");
+    }
+
+    const formData = new FormData();
+    formData.append("caption",feed.caption)
+    formData.append("imgUrl",feed.imgUrl)
+
+    mutate(formData);
+
+    setFeed({
+      imgUrl: "",
+      caption: "",
+    })
+
+    e.imgUrl.value = "";
   };
 
-  console.log(reader.readAsDataURL(file))
-  }
 
   return (
     <>
@@ -45,17 +51,19 @@ export default function Createpost({user}) {
       <div className="p-3 bg-white shadow rounded-lg">
         <div className="text-2xl px-3"> Create Post</div>
         <div className=" create-posts px-3">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             <label
               className="block my-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              htmlFor="file_input"
+              htmlFor="imgUrl"
             >
               Upload file
             </label>
             <input
               className="block w-full text-sm text-gray-900 p-2 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer"
-              id="file_input"
+              id="imgUrl"
               type="file"
+              filename="imgUrl"
+              onClick={e => (e.target.value = "")}
               onChange={handleFileUpload}
             />
 
@@ -67,8 +75,9 @@ export default function Createpost({user}) {
             </label>
             <textarea
               id="text"
-              name="text"
+              name="caption"
               rows="2"
+              value={feed.caption}
               onChange={handleChange}
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Your message..."
